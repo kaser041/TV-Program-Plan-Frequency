@@ -21,4 +21,9 @@ public class Item {
     public Item (TvShow tvShow) {
         this.tvShow = tvShow;
     }
+
+    public Item (TvShow tvShow,String title) {
+        this.title = title;
+        this.tvShow = tvShow;
+    }
 }

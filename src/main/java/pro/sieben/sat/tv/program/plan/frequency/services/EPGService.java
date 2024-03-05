@@ -2,10 +2,7 @@ package pro.sieben.sat.tv.program.plan.frequency.services;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
-import pro.sieben.sat.tv.program.plan.frequency.model.FrequencyResponse;
-import pro.sieben.sat.tv.program.plan.frequency.model.Item;
-import pro.sieben.sat.tv.program.plan.frequency.model.Status;
-import pro.sieben.sat.tv.program.plan.frequency.model.StatusResponse;
+import pro.sieben.sat.tv.program.plan.frequency.model.*;
 import pro.sieben.sat.tv.program.plan.frequency.utils.EPGItemsParser;
 
 import java.util.*;
@@ -13,10 +10,10 @@ import java.util.*;
 @Service
 public class EPGService {
 
-    private EPGItemsParser epgItemsParser = new EPGItemsParser();
+    private final EPGItemsParser epgItemsParser = new EPGItemsParser();
 
     // A test data map containing series with their status (RUNNING, ENDED).
-    private Map<String, Status> seriesStatusMap = new HashMap<>();
+    private final Map<String, Status> seriesStatusMap = new HashMap<>();
 
     @PostConstruct
     public void setUp() {
@@ -77,7 +74,7 @@ public class EPGService {
      * @param type The type of TV shows to retrieve. Possible values are "TvShow", "Series", and "Movie".
      * @return A list of FrequencyResponse objects representing the ordered TV shows by frequency for the specified type.
      */
-    public List<FrequencyResponse> getOrderedShowsByFrequencyByType(String date, String type) {
+    public List<FrequencyResponse> getOrderedShowsByFrequencyByType(String date, ShowType type) {
         Map<String, Integer> showFrequencyMap = getShowsMapByType(date, type);
         return convertMapToOrderedFrequencyResponsesList(showFrequencyMap);
     }
@@ -95,7 +92,7 @@ public class EPGService {
         List<Map.Entry<String, Integer>> entryList = new ArrayList<>(showFrequencyMap.entrySet());
 
         // Sort the list based on frequency in descending order
-        Collections.sort(entryList, (a, b) -> b.getValue().compareTo(a.getValue()));
+        entryList.sort((a, b) -> b.getValue().compareTo(a.getValue()));
 
         // Convert the sorted list to a list of ShowFrequency objects
         for (Map.Entry<String, Integer> entry : entryList) {
@@ -112,7 +109,7 @@ public class EPGService {
      * @param type The type of TV shows to retrieve. Possible values are "TvShow", "Series", and "Movie".
      * @return A map containing TV show titles as keys and their frequencies as values for the specified type.
      */
-    private Map<String, Integer> getShowsMapByType(String date, String type) {
+    private Map<String, Integer> getShowsMapByType(String date, ShowType type) {
         List<Item> items = epgItemsParser.parseItemsFromEPG(date);
 
         Map<String, Integer> showFrequencyMap = new HashMap<>();
@@ -120,15 +117,15 @@ public class EPGService {
         for (Item item : items) {
 
             switch (type) {
-                case "TvShow":
+                case TVSHOW:
                     if (item.getTitle() == null && item.getTvShow().getId() != null)
                         addShowToMap(item, showFrequencyMap);
                     break;
-                case "Series":
+                case SERIES:
                     if (item.getTitle() != null && item.getTvShow().getId() != null)
                         addShowToMap(item, showFrequencyMap);
                     break;
-                case "Movie":
+                case MOVIE:
                     if (item.getTitle() == null && item.getTvShow().getId() == null)
                         addShowToMap(item, showFrequencyMap);
                     break;
@@ -147,7 +144,7 @@ public class EPGService {
      * @param type The type of TV shows to retrieve. Possible values are "TvShow", "Series", and "Movie".
      * @return A list of FrequencyResponse objects representing the most frequent TV shows of the specified type.
      */
-    public List<FrequencyResponse> getMostFrequentShowsByShowType(String date, String type) {
+    public List<FrequencyResponse> getMostFrequentShowsByShowType(String date, ShowType type) {
         Map<String, Integer> showFrequencyMap = getShowsMapByType(date, type);
 
         List<FrequencyResponse> frequencyResponses = new ArrayList<>();
@@ -162,7 +159,7 @@ public class EPGService {
      * @return The updated list of FrequencyResponse objects containing the most frequent TV show(s) and their frequencies.
      */
     private List<FrequencyResponse> getFrequencyResponses(Map<String, Integer> showFrequencyMap, List<FrequencyResponse> frequencyResponses) {
-        List<String> mostfrequentShows = new ArrayList<>();
+        List<String> mostFrequentShows = new ArrayList<>();
         int maxFrequency = 0;
 
         for (Map.Entry<String, Integer> entry : showFrequencyMap.entrySet()) {
@@ -173,16 +170,16 @@ public class EPGService {
                 // Update maxFrequency
                 maxFrequency = frequency;
                 // Clear the previous most frequent shows list
-                mostfrequentShows.clear();
+                mostFrequentShows.clear();
                 // Add the current show to the list
-                mostfrequentShows.add(show);
+                mostFrequentShows.add(show);
             } else if (frequency == maxFrequency) {
                 // If the frequency is equal to maxFrequency, add the show to the list
-                mostfrequentShows.add(show);
+                mostFrequentShows.add(show);
             }
         }
 
-        for (String mostFrequentShow : mostfrequentShows) {
+        for (String mostFrequentShow : mostFrequentShows) {
             frequencyResponses.add(new FrequencyResponse(mostFrequentShow, maxFrequency));
         }
 
@@ -212,7 +209,7 @@ public class EPGService {
      */
     public List<StatusResponse> getSeriesByStatus(String date) {
         // Retrieves a map of series titles and their respective statuses based on the provided date
-        Map<String, Integer> seriesMap = getShowsMapByType(date,"Series");
+        Map<String, Integer> seriesMap = getShowsMapByType(date,ShowType.SERIES);
 
         // Initializes a list to store StatusResponse objects
         List<StatusResponse> statusResponses = new ArrayList<>();

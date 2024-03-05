@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pro.sieben.sat.tv.program.plan.frequency.model.FrequencyResponse;
-import pro.sieben.sat.tv.program.plan.frequency.model.Status;
+import pro.sieben.sat.tv.program.plan.frequency.model.ShowType;
 import pro.sieben.sat.tv.program.plan.frequency.model.StatusResponse;
 import pro.sieben.sat.tv.program.plan.frequency.services.EPGService;
 
@@ -20,8 +20,13 @@ import java.util.List;
 @RequestMapping(value = "/api")
 public class TVProgramPlanController {
 
+
+    private final EPGService epgService;
+
     @Autowired
-    private EPGService epgService;
+    public TVProgramPlanController(EPGService epgService) {
+        this.epgService = epgService;
+    }
 
     /**
      * Retrieves the most frequent TV shows airing on the specified date.
@@ -73,7 +78,7 @@ public class TVProgramPlanController {
      * @return A list of FrequencyResponse objects representing the most frequent TV shows of the specified type.
      */
     @GetMapping("/mostFrequantShowsOrderedShowsByType/{date}/{type}")
-    public List<FrequencyResponse> getMostFrequentShowsByShowType(@PathVariable String date, @PathVariable String type) {
+    public List<FrequencyResponse> getMostFrequentShowsByShowType(@PathVariable String date, @PathVariable ShowType type) {
         return epgService.getMostFrequentShowsByShowType(date,type);
     }
 
@@ -84,7 +89,7 @@ public class TVProgramPlanController {
      * @return A list of FrequencyResponse objects representing the most frequent TV shows of the specified type.
      */
     @GetMapping("/mostFrequantShowsOrderedShowsByType/{type}")
-    public List<FrequencyResponse> getMostFrequentShowsByShowType(@PathVariable String type) {
+    public List<FrequencyResponse> getMostFrequentShowsByShowType(@PathVariable ShowType type) {
         return epgService.getMostFrequentShowsByShowType(null,type);
     }
 
@@ -96,7 +101,7 @@ public class TVProgramPlanController {
      * @return A list of FrequencyResponse objects representing the TV shows ordered by frequency for the specified type.
      */
     @GetMapping("/frequencyOrderedShowsByType/{date}/{type}")
-    public List<FrequencyResponse> getFrequencyOrderedShowsByType(@PathVariable String date, @PathVariable String type) {
+    public List<FrequencyResponse> getFrequencyOrderedShowsByType(@PathVariable String date, @PathVariable ShowType type) {
         return epgService.getOrderedShowsByFrequencyByType(date,type);
     }
 
@@ -107,7 +112,7 @@ public class TVProgramPlanController {
      * @return A list of FrequencyResponse objects representing the TV shows ordered by frequency for the specified type.
      */
     @GetMapping("/frequencyOrderedShowsByType/{type}")
-    public List<FrequencyResponse> getFrequencyOrderedShowsByTypeWithoutDate(@PathVariable String type) {
+    public List<FrequencyResponse> getFrequencyOrderedShowsByTypeWithoutDate(@PathVariable ShowType type) {
         return epgService.getOrderedShowsByFrequencyByType(null,type);
     }
 

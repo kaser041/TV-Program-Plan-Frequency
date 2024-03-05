@@ -14,7 +14,7 @@ import java.util.List;
  * This class retrieves EPG data from a specified URL and converts it into a list of Item objects.
  */
 public class EPGItemsParser {
-    private final RestTemplate restTemplate = new RestTemplate();
+    private RestTemplate restTemplate = new RestTemplate();
 
     private static final  String EPG_URL_BASE = "https://magellan-api.p7s1.io/epg-broadcast/prosieben.de/graphql?";
     private static final String EPG_VARIABLES = "&variables={variables}";
@@ -40,5 +40,10 @@ public class EPGItemsParser {
             return response.getData().getSite().getEpg().getItems();
         }
         return Collections.emptyList();
+    }
+
+    // Package-private Setter for testing
+    void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 }
