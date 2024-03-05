@@ -11,6 +11,32 @@ To consume this API, you can use any HTTP client library or tools such as cURL o
 The base URL for accessing the API is:
 http://localhost:8080/api
 
+## Starting the Server as a Spring Boot Application
+
+To run the server as a Spring Boot application, follow these steps:
+
+1. **Clone the Repository**: Start by cloning this repository to your local machine then navigating to the Project Directory using the following commands:
+
+   ```bash
+   git clone <repository_url>
+   cd <project_directory>
+
+2. Build the Project: Before running the server, you need to build the project. Execute the following Maven command:
+   ```bash
+   mvn clean install
+
+3. Run the Application: After successfully building the project, you can start the server by running the following command:
+
+    ```bash
+    mvn spring-boot:run
+
+This command will start the Spring Boot application. Once the server is up and running, you will see log messages indicating that the application has started.
+
+4. Accessing the Endpoints: By default, the server will run on http://localhost:8080. 
+   You can access the endpoints defined in the application by navigating to this URL in your web browser or using tools like Postman.
+
+5. Shutting Down the Server: To stop the server, you can simply press Ctrl + C in the terminal where the server is running. 
+This will gracefully shut down the Spring Boot application.
 
 ## Endpoints
 

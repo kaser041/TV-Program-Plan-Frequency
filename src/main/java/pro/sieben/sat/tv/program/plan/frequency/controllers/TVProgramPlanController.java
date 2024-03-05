@@ -6,9 +6,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pro.sieben.sat.tv.program.plan.frequency.model.FrequencyResponse;
+import pro.sieben.sat.tv.program.plan.frequency.model.Status;
+import pro.sieben.sat.tv.program.plan.frequency.model.StatusResponse;
 import pro.sieben.sat.tv.program.plan.frequency.services.EPGService;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -109,4 +110,27 @@ public class TVProgramPlanController {
     public List<FrequencyResponse> getFrequencyOrderedShowsByTypeWithoutDate(@PathVariable String type) {
         return epgService.getOrderedShowsByFrequencyByType(null,type);
     }
+
+    /**
+     * Retrieves a list of series with their statuses based on the provided date.
+     *
+     * @param date The date for which series statuses are to be retrieved.
+     * @return A list of StatusResponse objects representing series and their statuses.
+     */
+    @GetMapping("/SeriesByStatus/{date}")
+    public List<StatusResponse> getSeriesByStatus(@PathVariable String date) {
+        return epgService.getSeriesByStatus(date);
+    }
+
+    /**
+     * Retrieves a list of series with their statuses for the current date.
+     * If no date is provided, the method retrieves series statuses for the current date.
+     *
+     * @return A list of StatusResponse objects representing series and their statuses.
+     */
+    @GetMapping("/SeriesByStatus/")
+    public List<StatusResponse> getSeriesByStatus() {
+        return epgService.getSeriesByStatus(null);
+    }
+
 }

@@ -1,8 +1,11 @@
 package pro.sieben.sat.tv.program.plan.frequency.services;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import pro.sieben.sat.tv.program.plan.frequency.model.FrequencyResponse;
 import pro.sieben.sat.tv.program.plan.frequency.model.Item;
+import pro.sieben.sat.tv.program.plan.frequency.model.Status;
+import pro.sieben.sat.tv.program.plan.frequency.model.StatusResponse;
 import pro.sieben.sat.tv.program.plan.frequency.utils.EPGItemsParser;
 
 import java.util.*;
@@ -10,7 +13,21 @@ import java.util.*;
 @Service
 public class EPGService {
 
-    EPGItemsParser epgItemsParser = new EPGItemsParser();
+    private EPGItemsParser epgItemsParser = new EPGItemsParser();
+
+    // A test data map containing series with their status (RUNNING, ENDED).
+    private Map<String, Status> seriesStatusMap = new HashMap<>();
+
+    @PostConstruct
+    public void setUp() {
+        seriesStatusMap.put("The Big Bang Theory",Status.ENDED);
+        seriesStatusMap.put("Galileo",Status.RUNNING);
+        seriesStatusMap.put("Die Simpsons",Status.RUNNING);
+        seriesStatusMap.put("Modern Family",Status.ENDED);
+        seriesStatusMap.put("Scrubs - Die Anfänger",Status.ENDED);
+        seriesStatusMap.put("Die Goldbergs",Status.ENDED);
+        seriesStatusMap.put("Will & Grace",Status.ENDED);
+    }
 
     /**
      * Retrieves the frequencies of TV shows from parsed EPG items.
@@ -60,7 +77,7 @@ public class EPGService {
      * @param type The type of TV shows to retrieve. Possible values are "TvShow", "Series", and "Movie".
      * @return A list of FrequencyResponse objects representing the ordered TV shows by frequency for the specified type.
      */
-    public List<FrequencyResponse> getOrderedShowsByFrequencyByType(String date,String type) {
+    public List<FrequencyResponse> getOrderedShowsByFrequencyByType(String date, String type) {
         Map<String, Integer> showFrequencyMap = getShowsMapByType(date, type);
         return convertMapToOrderedFrequencyResponsesList(showFrequencyMap);
     }
@@ -95,7 +112,7 @@ public class EPGService {
      * @param type The type of TV shows to retrieve. Possible values are "TvShow", "Series", and "Movie".
      * @return A map containing TV show titles as keys and their frequencies as values for the specified type.
      */
-    private  Map<String, Integer>  getShowsMapByType(String date, String type) {
+    private Map<String, Integer> getShowsMapByType(String date, String type) {
         List<Item> items = epgItemsParser.parseItemsFromEPG(date);
 
         Map<String, Integer> showFrequencyMap = new HashMap<>();
@@ -140,7 +157,7 @@ public class EPGService {
     /**
      * Calculates the frequency responses for TV shows based on the provided show frequency map.
      *
-     * @param showFrequencyMap A map containing TV show titles as keys and their frequencies as values.
+     * @param showFrequencyMap   A map containing TV show titles as keys and their frequencies as values.
      * @param frequencyResponses A list of FrequencyResponse objects to which the calculated responses will be added.
      * @return The updated list of FrequencyResponse objects containing the most frequent TV show(s) and their frequencies.
      */
@@ -175,7 +192,7 @@ public class EPGService {
     /**
      * Adds the TV show from the given item to the show frequency map.
      *
-     * @param item The item containing information about the TV show.
+     * @param item             The item containing information about the TV show.
      * @param showFrequencyMap A map containing TV show titles as keys and their frequencies as values.
      */
     private void addShowToMap(Item item, Map<String, Integer> showFrequencyMap) {
@@ -187,4 +204,25 @@ public class EPGService {
         }
     }
 
+    /**
+     * Retrieves a list of running series based on the provided date.
+     *
+     * @param date The date for which the running series are to be retrieved.
+     * @return A list of StatusResponse objects representing the running series.
+     */
+    public List<StatusResponse> getSeriesByStatus(String date) {
+        // Retrieves a map of series titles and their respective statuses based on the provided date
+        Map<String, Integer> seriesMap = getShowsMapByType(date,"Series");
+
+        // Initializes a list to store StatusResponse objects
+        List<StatusResponse> statusResponses = new ArrayList<>();
+
+        // Iterates through the seriesMap to create StatusResponse objects and add them to the list
+        for (String serie: seriesMap.keySet()) {
+            statusResponses.add(new StatusResponse(serie,seriesStatusMap.get(serie)));
+        }
+
+        // Returns the list of StatusResponse objects representing the running series
+        return statusResponses;
+    }
 }
