@@ -1,0 +1,168 @@
+openapi: "3.0.3"
+info:
+  title: "TV_Program_Plan_Frequency API"
+  description: "TV_Program_Plan_Frequency API"
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:8080/"
+paths:
+  /api/mostFrequantShows/{date}:
+    get:
+      summary: "GET api/mostFrequantShows/{date}"
+      operationId: "getMostFrequentShows"
+      parameters:
+        - name: "date"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FrequencyResponse"
+  /api/mostFrequantShows:
+    get:
+      summary: "GET api/mostFrequantShows"
+      operationId: "getMostFrequentShowsWithoutDate"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FrequencyResponse"
+  /api/frequencyOrderedShows/{date}:
+    get:
+      summary: "GET api/frequencyOrderedShows/{date}"
+      operationId: "getFrequencyOrderedShows"
+      parameters:
+        - name: "date"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FrequencyResponse"
+  /api/frequencyOrderedShows:
+    get:
+      summary: "GET api/frequencyOrderedShows"
+      operationId: "getFrequencyOrderedShows"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FrequencyResponse"
+  /api/mostFrequantShowsOrderedShowsByType/{date}/{type}:
+    get:
+      summary: "GET api/mostFrequantShowsOrderedShowsByType/{date}/{type}"
+      operationId: "getMostFrequentShowsByShowType"
+      parameters:
+        - name: "date"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "type"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FrequencyResponse"
+  /api/mostFrequantShowsOrderedShowsByType/{type}:
+    get:
+      summary: "GET api/mostFrequantShowsOrderedShowsByType/{type}"
+      operationId: "getMostFrequentShowsByShowType"
+      parameters:
+        - name: "type"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FrequencyResponse"
+  /api/frequencyOrderedShowsByType/{date}/{type}:
+    get:
+      summary: "GET api/frequencyOrderedShowsByType/{date}/{type}"
+      operationId: "getFrequencyOrderedShowsByType"
+      parameters:
+        - name: "date"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "type"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FrequencyResponse"
+  /api/frequencyOrderedShowsByType/{type}:
+    get:
+      summary: "GET api/frequencyOrderedShowsByType/{type}"
+      operationId: "getFrequencyOrderedShowsByTypeWithoutDate"
+      parameters:
+        - name: "type"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FrequencyResponse"
+components:
+  schemas:
+    FrequencyResponse:
+      type: "object"
+      properties:
+        title:
+          type: "string"
+        frequency:
+          type: "integer"
+          format: "int32"
