@@ -16,12 +16,14 @@ import java.util.List;
 public class EPGItemsParser {
     private RestTemplate restTemplate = new RestTemplate();
 
-    private static final  String EPG_URL_BASE = "https://magellan-api.p7s1.io/epg-broadcast/prosieben.de/graphql?";
+    private static final String EPG_URL_BASE = "https://magellan-api.p7s1.io/epg-broadcast/prosieben.de/graphql?";
     private static final String EPG_VARIABLES = "&variables={variables}";
 
     private static final String EPG_QUERY = "&query={QUERY}";
     private static final String QUERY = "query EpgQuery($domain: String!," + "$type: EpgType!, $date: DateTime) { site(domain: $domain) { epg(type: $type, date: $date) { items {" + "...fEpgItem } } } } fragment fEpgItem on EpgItem { id title description startTime endTime episode {" + "number } season { number } tvShow { title id } }";
-    private static final String EPG_QUERY_HASH = "&queryhash=1";
+    private static final String EPG_QUERY_HASH = "&queryhash={hashCounter}";
+
+    private int hashCounter = 0;
 
     /**
      * Parses EPG items from a remote API for the specified date.
@@ -30,12 +32,17 @@ public class EPGItemsParser {
      * @return A list of Item objects representing the EPG items retrieved from the API.
      */
     public List<Item> parseItemsFromEPG(String date) {
-        if (date==null) {
+        hashCounter++;
+        String variables;
+        if (date == null) {
             date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
+            variables = "{\"date\":\"" + date + "\",\"domain\":\"prosieben.de\",\"type\":\"FULL\"}";
+        } else {
+            variables = "{\"date\":\"" + date + "T00:00:00.000Z\",\"domain\":\"prosieben.de\",\"type\":\"FULL\"}";
         }
 
-        String variables = "{\"date\":\"" + date +  "\",\"domain\":\"prosieben.de\",\"type\":\"FULL\"}";
-        ApiResponse response = restTemplate.getForEntity(EPG_URL_BASE + EPG_VARIABLES + EPG_QUERY + EPG_QUERY_HASH, ApiResponse.class, variables, QUERY).getBody();
+        ApiResponse response = restTemplate.getForEntity(EPG_URL_BASE + EPG_VARIABLES + EPG_QUERY + EPG_QUERY_HASH,
+                ApiResponse.class, variables, QUERY,hashCounter).getBody();
         if (response != null) {
             return response.getData().getSite().getEpg().getItems();
         }

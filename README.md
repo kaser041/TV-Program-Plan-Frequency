@@ -47,7 +47,7 @@ This will gracefully shut down the Spring Boot application.
 Retrieve the most frequent TV shows airing on the specified date.
 
 **Parameters:**
-- `date`: The date for which the most frequent TV shows are to be retrieved. Format: `YYYY-MM-DD`.
+- `date`: The date for which the most frequent TV shows are to be retrieved. Format: `yyyy-MM-dd`.
 
 **Example:**
 GET /mostFrequantShows/2024-03-15
@@ -68,7 +68,7 @@ GET /mostFrequantShows
 Retrieve the TV shows ordered by frequency for the specified date.
 
 **Parameters:**
-- `date`: The date for which the TV shows are to be retrieved. Format: `YYYY-MM-DD`.
+- `date`: The date for which the TV shows are to be retrieved. Format: `yyyy-MM-dd`.
 
 **Example:**
 GET /frequencyOrderedShows/2024-03-15
@@ -89,8 +89,8 @@ GET /frequencyOrderedShows
 Retrieve the most frequent TV shows of a specific type airing on the specified date.
 
 **Parameters:**
-- `date`: The date for which the most frequent TV shows are to be retrieved. Format: `YYYY-MM-DD`.
-- `type`: The type of TV shows to retrieve. Possible values: `TvShow`, `Series`, `Movie`.
+- `date`: The date for which the most frequent TV shows are to be retrieved. Format: `yyyy-MM-dd`.
+- `type`: The type of TV shows to retrieve. Possible values: `TVSHOW`, `SERIES`, `MOVIE`.
 
 **Example:**
 GET /mostFrequantShowsOrderedShowsByType/2024-03-15/TvShow
@@ -101,7 +101,7 @@ GET /mostFrequantShowsOrderedShowsByType/2024-03-15/TvShow
 Retrieve the most frequent TV shows of a specific type without specifying the date.
 
 **Parameters:**
-- `type`: The type of TV shows to retrieve. Possible values: `TvShow`, `Series`, `Movie`.
+- `type`: The type of TV shows to retrieve. Possible values: `TVSHOW`, `SERIES`, `MOVIE`.
 
 **Example:**
 GET /mostFrequantShowsOrderedShowsByType/TvShow
@@ -114,8 +114,8 @@ GET /mostFrequantShowsOrderedShowsByType/TvShow
 Retrieve the TV shows of a specific type ordered by frequency for the specified date.
 
 **Parameters:**
-- `date`: The date for which the TV shows are to be retrieved. Format: `YYYY-MM-DD`.
-- `type`: The type of TV shows to retrieve. Possible values: `TvShow`, `Series`, `Movie`.
+- `date`: The date for which the TV shows are to be retrieved. Format:`yyyy-MM-dd`.
+- `type`: The type of TV shows to retrieve. Possible values:`TVSHOW`, `SERIES`, `MOVIE`.
 
 **Example:**
 GET /frequencyOrderedShowsByType/2024-03-15/TvShow
@@ -126,10 +126,31 @@ GET /frequencyOrderedShowsByType/2024-03-15/TvShow
 Retrieve the TV shows of a specific type ordered by frequency without specifying the date.
 
 **Parameters:**
-- `type`: The type of TV shows to retrieve. Possible values: `TvShow`, `Series`, `Movie`.
+- `type`: The type of TV shows to retrieve. Possible values: `TVSHOW`, `SERIES`, `MOVIE`.
 
 **Example:**
 GET /frequencyOrderedShowsByType/TvShow
+
+### Retrieve Series by Status
+
+#### GET /SeriesByStatus/{date}
+
+Retrieve a list of series with their statuses based on the provided date.
+
+**Parameters:**
+- `date`: The date for which series statuses are to be retrieved. Format: `YYYY-MM-DD`.
+
+**Example:**
+GET /SeriesByStatus/2024-03-15
+
+
+#### GET /SeriesByStatus/
+
+Retrieve a list of series with their statuses for the current date.
+If no date is provided, the method retrieves series statuses for the current date.
+
+**Example:**
+GET /SeriesByStatus/
 
 
 ## Response Format

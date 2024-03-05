@@ -133,7 +133,7 @@ public class TVProgramPlanController {
      *
      * @return A list of StatusResponse objects representing series and their statuses.
      */
-    @GetMapping("/SeriesByStatus/")
+    @GetMapping("/SeriesByStatus")
     public List<StatusResponse> getSeriesByStatus() {
         return epgService.getSeriesByStatus(null);
     }

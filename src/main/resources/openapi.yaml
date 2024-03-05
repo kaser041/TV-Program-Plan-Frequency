@@ -4,7 +4,7 @@ info:
   description: "TV_Program_Plan_Frequency API"
   version: "1.0.0"
 servers:
-  - url: "http://localhost:8080/"
+  - url: "https://TV_Program_Plan_Frequency"
 paths:
   /api/mostFrequantShows/{date}:
     get:
@@ -85,6 +85,10 @@ paths:
           required: true
           schema:
             type: "string"
+            enum:
+              - "TVSHOW"
+              - "SERIES"
+              - "MOVIE"
       responses:
         "200":
           description: "OK"
@@ -104,6 +108,10 @@ paths:
           required: true
           schema:
             type: "string"
+            enum:
+              - "TVSHOW"
+              - "SERIES"
+              - "MOVIE"
       responses:
         "200":
           description: "OK"
@@ -128,6 +136,10 @@ paths:
           required: true
           schema:
             type: "string"
+            enum:
+              - "TVSHOW"
+              - "SERIES"
+              - "MOVIE"
       responses:
         "200":
           description: "OK"
@@ -147,6 +159,10 @@ paths:
           required: true
           schema:
             type: "string"
+            enum:
+              - "TVSHOW"
+              - "SERIES"
+              - "MOVIE"
       responses:
         "200":
           description: "OK"
@@ -156,6 +172,38 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/FrequencyResponse"
+  /api/SeriesByStatus/{date}:
+    get:
+      summary: "GET api/SeriesByStatus/{date}"
+      operationId: "getSeriesByStatus"
+      parameters:
+        - name: "date"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/StatusResponse"
+  /api/SeriesByStatus:
+    get:
+      summary: "GET api/SeriesByStatus"
+      operationId: "getSeriesByStatus"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/StatusResponse"
 components:
   schemas:
     FrequencyResponse:
@@ -166,3 +214,13 @@ components:
         frequency:
           type: "integer"
           format: "int32"
+    StatusResponse:
+      type: "object"
+      properties:
+        title:
+          type: "string"
+        status:
+          type: "string"
+          enum:
+            - "RUNNING"
+            - "ENDED"
