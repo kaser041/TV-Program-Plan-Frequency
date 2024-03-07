@@ -29,7 +29,7 @@ class EPGItemParserTest {
     void setUp() {
         epgItemsParser = new EPGItemsParser();
         epgItemsParser.setRestTemplate(restTemplate);
-        when(restTemplate.getForEntity(any(), any(), any(), any())).thenReturn(new ResponseEntity<>
+        when(restTemplate.getForEntity(any(), any(), any(), any(), any())).thenReturn(new ResponseEntity<>
                 (new ApiResponse(new Data(new Site(new Epg(List.of
                         (new Item(new TvShow("Show1", "id1")))))), null),
                         HttpStatusCode.valueOf(200)));
@@ -49,7 +49,7 @@ class EPGItemParserTest {
 
     @Test
      void testparseItemsFromEPGResponseNull() {
-        when(restTemplate.getForEntity(any(), any(), any(), any())).thenReturn(new ResponseEntity<>
+        when(restTemplate.getForEntity(any(), any(), any(), any(), any())).thenReturn(new ResponseEntity<>
                 (null, HttpStatusCode.valueOf(200)));
         assertThat(epgItemsParser.parseItemsFromEPG("")).isEmpty();
     }
