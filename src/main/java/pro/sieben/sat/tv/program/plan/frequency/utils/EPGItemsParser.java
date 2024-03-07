@@ -5,9 +5,7 @@ import pro.sieben.sat.tv.program.plan.frequency.model.ApiResponse;
 import pro.sieben.sat.tv.program.plan.frequency.model.Item;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * A utility class for parsing Electronic Programming Guide (EPG) items from a remote API.
@@ -25,6 +23,8 @@ public class EPGItemsParser {
 
     private int hashCounter = 0;
 
+    private Map<String,Integer> queryHashMap = new HashMap<>();
+
     /**
      * Parses EPG items from a remote API for the specified date.
      *
@@ -32,12 +32,17 @@ public class EPGItemsParser {
      * @return A list of Item objects representing the EPG items retrieved from the API.
      */
     public List<Item> parseItemsFromEPG(String date) {
-        hashCounter++;
         String variables;
         if (date == null) {
             date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
             variables = "{\"date\":\"" + date + "\",\"domain\":\"prosieben.de\",\"type\":\"FULL\"}";
         } else {
+            if (queryHashMap.containsKey(date)) {
+                hashCounter = queryHashMap.get(date);
+            } else {
+                hashCounter++;
+                queryHashMap.put(date,hashCounter);
+            }
             variables = "{\"date\":\"" + date + "T00:00:00.000Z\",\"domain\":\"prosieben.de\",\"type\":\"FULL\"}";
         }
 

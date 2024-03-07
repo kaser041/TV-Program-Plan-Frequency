@@ -11,6 +11,14 @@ To consume this API, you can use any HTTP client library or tools such as cURL o
 The base URL for accessing the API is:
 http://localhost:8080/api
 
+
+### Security Configuration
+To access secured endpoints in our application, you need to provide the following credentials in the request header:
+
+Username: user
+Password: password
+These credentials should be included in the header of your HTTP request to authenticate and gain access to the protected resources.
+
 ## Starting the Server as a Spring Boot Application
 
 To run the server as a Spring Boot application, follow these steps:
