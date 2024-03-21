@@ -1,5 +1,6 @@
 package pro.sieben.sat.tv.program.plan.frequency.utils;
 
+import io.micrometer.common.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import pro.sieben.sat.tv.program.plan.frequency.model.ApiResponse;
 import pro.sieben.sat.tv.program.plan.frequency.model.Item;
@@ -33,7 +34,7 @@ public class EPGItemsParser {
      */
     public List<Item> parseItemsFromEPG(String date) {
         String variables;
-        if (date == null) {
+        if (StringUtils.isEmpty(date)) {
             date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
             variables = "{\"date\":\"" + date + "\",\"domain\":\"prosieben.de\",\"type\":\"FULL\"}";
         } else {

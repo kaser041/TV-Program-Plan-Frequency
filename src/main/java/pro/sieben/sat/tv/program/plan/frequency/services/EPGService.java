@@ -10,7 +10,7 @@ import java.util.*;
 @Service
 public class EPGService {
 
-    private final EPGItemsParser epgItemsParser = new EPGItemsParser();
+    private EPGItemsParser epgItemsParser = new EPGItemsParser();
 
     // A test data map containing series with their status (RUNNING, ENDED).
     private final Map<String, Status> seriesStatusMap = new HashMap<>();
